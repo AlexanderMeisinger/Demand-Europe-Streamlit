@@ -179,6 +179,7 @@ if (display == "Europe") and (number_sensitivities <= 1):
          df.drop("methane", axis=1, inplace=True, errors="ignore")
          df.drop("solar PV", axis=1, inplace=True, errors="ignore")
          df.drop("others", axis=1, inplace=True, errors="ignore")
+         df.drop("hydrogen", axis=1, inplace=True, errors="ignore")
 
     # ToDo: Check biomass capacities
     if idx == 'generation':
@@ -285,7 +286,6 @@ if (display == "Germany") and (number_sensitivities <= 1):
         df = df.loc[:, order]
 
     if idx == 'storage':
-         print("test")
          #df.drop("co2", axis=1, inplace=True, errors="ignore")
          df.drop("co2 sequestered", axis=1, inplace=True, errors="ignore")
          #df.drop("electricity distribution grid", axis=1, inplace=True, errors="ignore")
@@ -301,6 +301,7 @@ if (display == "Germany") and (number_sensitivities <= 1):
          df.drop("biogas", axis=1, inplace=True, errors="ignore")
          df.drop("gas", axis=1, inplace=True, errors="ignore")
          df.drop("ammonia store", axis=1, inplace=True, errors="ignore") # Check again
+         df.drop("hydrogen", axis=1, inplace=True, errors="ignore") # Check again
 
     # ToDo: Check biomass capacities
     if idx == 'generation':
@@ -345,7 +346,7 @@ if (display == "Germany") and (number_sensitivities <= 1):
         yaxis=dict(
             title=dict(font=dict(size=18)),  # Y-axis title font size
             tickfont=dict(size=16),  # Y-axis tick labels font size
-            tickformat=".0f"
+            tickformat=".1f" if idx =="storage" else ".0f"
         ),
         legend=dict(
             title=dict(text=""),  # Remove the legend title
