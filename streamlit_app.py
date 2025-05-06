@@ -69,6 +69,15 @@ with st.sidebar:
         help='Left button must be selected for all other choices in this segment.',
     )
 
+    choices = {0: "yes", 1: "no"}
+    sel["high_carbon"] = st.radio(
+        ":factory: Climate goals",
+        choices,
+        format_func=lambda x: choices[x],
+        horizontal=True,
+        help='Left button must be selected for all other choices in this segment.',
+    )
+
     choices = {0: "No", 1: "Yes"}
     sel["low_h2cost"] = st.radio(
         "💰 Low H2 cost",
@@ -96,7 +105,7 @@ with st.sidebar:
         help='Left button must be selected for all other choices in this segment.',
     )
 
-    number_sensitivities = sel["low_carbon"] + sel["low_h2cost"] + sel["grid_freeze"] + sel["high_h2demand"] 
+    number_sensitivities = sel["low_carbon"] + sel["low_h2cost"] + sel["grid_freeze"] + sel["high_h2demand"] + sel["high_carbon"]
 
     with st.expander("Details"):
          st.write("""
@@ -117,7 +126,7 @@ if (display == "Europe") and (number_sensitivities <= 1):
     choices = config["EU_scenarios"]
     idx = st.selectbox("View", choices, format_func=lambda x: choices[x], label_visibility='hidden')
 
-    ds = xr.open_dataset("data/EU_scenarios_streamlit_v2.nc")
+    ds = xr.open_dataset("data/EU_scenarios_streamlit_v3.nc")
 
     accessors = {k: v for k, v in sel.items() if k not in ['power_grid', 'hydrogen_grid']}
     df = ds[idx].sel(**accessors, drop=True).to_dataframe().squeeze().unstack(level=0).dropna(axis=1)
@@ -245,7 +254,7 @@ if (display == "Germany") and (number_sensitivities <= 1):
     choices = config["DE_scenarios"]
     idx = st.selectbox("View", choices, format_func=lambda x: choices[x], label_visibility='hidden')
 
-    ds = xr.open_dataset("data/DE_scenarios_streamlit_v2.nc")
+    ds = xr.open_dataset("data/DE_scenarios_streamlit_v3.nc")
 
     accessors = {k: v for k, v in sel.items() if k not in ['power_grid', 'hydrogen_grid']}
     df = ds[idx].sel(**accessors, drop=True).to_dataframe().squeeze().unstack(level=0).dropna(axis=1)
