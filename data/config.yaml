@@ -1,5 +1,7 @@
+# Basemap tile setting
 tiles: "OSM"
 
+# Technology color mapping
 tech_colors:
   # wind
   onwind: "#235ebc"
@@ -34,10 +36,6 @@ tech_colors:
   Solar PV: "#f9d002"
   solar thermal: '#ffbf2b'
   rural solar thermal: '#ffbf2b'
-  #residential rural solar thermal: '#ffbf2b'
-  #urban central solar thermal: '#ffbf2b'
-  #residential urban decentral solar thermal: '#ffbf2b'
-  #urban decentral solar thermal: '#ffbf2b'
   solar rooftop: '#ffea80'
   solar-hsat: '#ffc04c'
   # gas
@@ -48,8 +46,6 @@ tech_colors:
   gas boiler: '#db6a25'
   gas boilers: '#db6a25'
   gas boiler marginal: '#db6a25'
-  #urban decentral gas boiler: '#db6a25'
-  #rural gas boiler: '#db6a25'
   gas: '#e05b09'
   Gas: '#e05b09'
   fossil gas: '#e05b09'
@@ -68,8 +64,6 @@ tech_colors:
   oil: '#c9c9c9'
   Oil: '#c9c9c9'
   oil boiler: '#adadad'
-  #rural oil boiler: '#adadad'
-  #urban decentral oil boiler: '#adadad'
   agriculture machinery oil: '#949494'
   agriculture machinery: '#abdeff'
   shipping oil: "#808080"
@@ -151,11 +145,6 @@ tech_colors:
   hot water storage: '#e69487'
   hot water charging: '#e69487'
   hot water discharging: '#e69487'
-  #urban central water tanks: '#e69487'
-  #rural water tanks: '#e69487'
-  #residential urban decentral water tanks: '#e69487'
-  #residential rural water tanks: '#e69487'
-  #urban decentral water tanks: '#e69487'
   # heat demand
   Heat load: '#cc1f1f'
   heat: '#cc1f1f'
@@ -170,11 +159,7 @@ tech_colors:
   heat pumps: '#2fb537'
   heat pump: '#2fb537'
   air heat pump: '#36eb41'
-  #urban central air heat pump: '#36eb41'
-  #urban decentral air heat pump: '#36eb41'
-  #residential urban decentral air heat pump: '#36eb41'
   ground heat pump: '#2fb537'
-  #rural ground heat pump: '#2fb537'
   Ambient: '#98eb9d'
   gas CHP: '#8a5751'
   CHP: '#8a5751'
@@ -184,9 +169,6 @@ tech_colors:
   CHP electric: '#8a5751'
   district heating: '#e8beac'
   resistive heater: '#d8f9b8'
-  #urban decentral resistive heater: '#d8f9b8'
-  #rural resistive heater: '#d8f9b8'
-  #residential urban decentral resistive heater: '#d8f9b8'
   retrofitting: '#8487e8'
   building retrofitting: '#8487e8'
   # hydrogen
@@ -262,7 +244,7 @@ tech_colors:
   shipping oil emissions: "#555555"
   land transport oil emissions: '#777777'
   agriculture machinery oil emissions: '#333333'
-  co2 sequestered: '#1E5745' #
+  co2 sequestered: '#1E5745' 
   # other
   shipping: '#03a2ff'
   power-to-heat: '#2fb537'
@@ -284,6 +266,7 @@ tech_colors:
   ammonia store: '#03a2ff'
   haber-bosch: '#03a2ff'
 
+# Display order for energy balance plots
 preferred_order_energy_balance:
   - solar PV
   - onshore wind
@@ -320,96 +303,7 @@ preferred_order_energy_balance:
   - process emissions carbon capture
   - others
 
-spatial:
-  nodal_options:
-    - ["Capacity (GW)", "Onshore Wind"]
-    - ["Capacity (GW)", "Offshore Wind"]
-    - ["Capacity (GW)", "Solar PV (rooftop)"]
-    - ["Capacity (GW)", "Solar PV (utility)"]
-    - ["Capacity (GW)", "H2 Electrolysis"]
-    - ["Capacity (GW)", "power-to-liquid"]
-    - ["Capacity (GW)", "methanation"]
-    - ["Capacity (GW)", "H2 Fuel Cell"]
-    - ["Capacity (GW)", "Hydro Electricity"]
-    - ["Capacity (GW)", "battery storage"]
-    - ["Capacity (GW)", "Ground-sourced Heat Pump"]
-    - ["Capacity (GW)", "Air-sourced Heat Pump"]
-    - ["Capacity (GW)", "electricity distribution grid"]
-    - ["Capacity Factors (%)", "Solar PV (rooftop)"]
-    - ["Capacity Factors (%)", "Solar PV (utility)"]
-    - ["Capacity Factors (%)", "Onshore Wind"]
-    - ["Capacity Factors (%)", "Offshore Wind"]
-    - ["Coefficient of Performance (-)", "Air-sourced Heat Pump"]
-    - ["Coefficient of Performance (-)", "Ground-sourced Heat Pump"]
-    - ["Curtailment (%)", "Onshore Wind"]
-    - ["Curtailment (%)", "Offshore Wind (AC)"]
-    - ["Curtailment (%)", "Offshore Wind (DC)"]
-    - ["Curtailment (%)", "Solar PV (rooftop)"]
-    - ["Curtailment (%)", "Solar PV (utility)"]
-    - ["Demand (TWh)", "Electricity"]
-    - ["Demand (TWh)", "Heat"]
-    - ["Demand (TWh)", "Hydrogen"]
-    - ["Demand (TWh)", "Liquid Hydrocarbons"]
-    - ["Demand (TWh)", "Biomass"]
-    - ["Import-Export Balance (TWh)", "Total"]
-    - ["Import-Export Balance (TWh)", "Electricity"]
-    - ["Import-Export Balance (TWh)", "Hydrogen"]
-    - ["Import-Export Balance (TWh)", "Methane"]
-    - ["Import-Export Balance (TWh)", "Liquid Hydrocarbons"]
-    - ["Levelised Cost of Electricity (€/MWh)", "Onshore Wind"]
-    - ["Levelised Cost of Electricity (€/MWh)", "Offshore Wind (AC)"]
-    - ["Levelised Cost of Electricity (€/MWh)", "Offshore Wind (DC)"]
-    - ["Levelised Cost of Electricity (€/MWh)", "Solar PV (rooftop)"]
-    - ["Levelised Cost of Electricity (€/MWh)", "Solar PV (utility)"]
-    - ["Market Values (€/MWh)", "Onshore Wind"]
-    - ["Market Values (€/MWh)", "Offshore Wind (AC)"]
-    - ["Market Values (€/MWh)", "Offshore Wind (DC)"]
-    - ["Market Values (€/MWh)", "Solar PV (utility)"]
-    - ["Market Values (€/MWh)", "Solar PV (rooftop)"]
-    - ["Market Prices (€/MWh)", "hydrogen"]
-    - ["Market Prices (€/MWh)", "Electricity"]
-    - ["Market Prices (€/MWh)", "Heat"]
-    - ["Potential (TWh)", "Hydrogen Storage (nearshore cavern)"]
-    - ["Potential (TWh)", "Biogas"]
-    - ["Potential (TWh)", "Solid Biomass"]
-    - ["Storage Capacity (GWh)", "hydrogen"]
-    - ["Storage Capacity (GWh)", "battery storage"]
-    - ["Storage Capacity (GWh)", "hot water storage"]
-    - ["Used Potential (%)", "Onshore Wind"]
-    - ["Used Potential (%)", "Offshore Wind (AC)"]
-    - ["Used Potential (%)", "Offshore Wind (DC)"]
-    - ["Used Potential (%)", "Solar PV (rooftop)"]
-    - ["Used Potential (%)", "Solar PV (utility)"]
-  network_options:
-    - ["Hydrogen Network", "Total Capacity (GW)"]
-    - ["Hydrogen Network", "Retrofitted Capacity (GW)"]
-    - ["Hydrogen Network", "New Capacity (GW)"]
-    - ["Hydrogen Network", "Maximum Retrofitting (GW)"]
-    - ["Electricity Network", "Total Capacity (GW)"]
-    - ["Electricity Network", "Reinforcement (GW)"]
-    - ["Electricity Network", "Original Capacity (GW)"]
-    - ["Electricity Network", "Maximum Capacity (GW)"]
-
-operation:
-  carrier:
-    total-electricity: Total Electricity
-    total-heat: Total Heating
-    H2: Hydrogen
-    gas: Methane
-    total-liquid-hydrocarbons: Liquid Hydrocarbons
-    co2 stored: Stored Carbon Dioxide
-    co2: Carbon Dioxide
-    # AC: High Voltage Electricity
-    # low voltage: Low Voltage Electricity
-    # urban central heat: Urban Central Heating
-    # residential rural heat: Residential Rural Building Heating
-    # methanol: Methanol
-    # oil: Liquid Hydrocarbons
-  resolution:
-    3H: 3-hourly
-    24H: daily
-    168H: weekly
-
+# Scenario dropdown options for Europe
 EU_scenarios:
   energy: Energy Balance (TWh/a)
   hydrogen: Hydrogen Balance (TWh/a)
@@ -419,19 +313,10 @@ EU_scenarios:
   storage: Storage Capacities (TWh)
   conversion: Conversion Capacities (GW)
 
+# Scenario dropdown options for Germany
 DE_scenarios:
   energy: Energy Balance (TWh/a)
   hydrogen: Hydrogen Balance (TWh/a)
-  #costs: Total System Costs (bn€/a)
   generation: Generation Capacities (GW)
   storage: Storage Capacities (TWh)
   conversion: Conversion Capacities (GW)
-  
-ylim:
-  energy: [-15000,15000]
-  hydrogen: [-15000,15000]
-  costs: [0,1000]
-  co2: [-600,600]
-  generation: [0,7000]
-  storage: [0,200]
-  conversion: [0,11000]

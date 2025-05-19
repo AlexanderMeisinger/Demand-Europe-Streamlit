@@ -1,37 +1,29 @@
-# This script visualize results from PyPSA-Eur via Streamlit
+# Visualization of PyPSA-Eur results using Streamlit
 # Author: Alexander Meisinger
 # Base: https://github.com/fneum/spatial-sector-dashboard and https://github.com/PyPSA/pypsa-eur
 
 import streamlit as st
 import pandas as pd
-import numpy as np
 import xarray as xr
 import yaml
-import plotly.graph_objects as go
 from matplotlib.colors import to_rgba
 from contextlib import suppress
-import geopandas as gpd
-import networkx as nx
-import hvplot.networkx as hvnx
-import holoviews as hv
-import datetime
-import hvplot.pandas
 import plotly.express as px
 from PIL import Image
 
+# Import helper functions (defined in helpers.py)
 from helpers import rename_techs_energy_balance, prepare_colors, rename_techs_h2_balance, rename_tech_capacity
 
-CACHE_TTL = 24*3600 # seconds
-
-### MAIN
-
+# Load configuration (defined in data/config.yaml)
 with open("data/config.yaml", encoding='utf-8') as file:
     config = yaml.safe_load(file)
 
+# Define preferred column ordering for plotting
 preferred_order_energy_balance = pd.Index(config['preferred_order_energy_balance'])
 
-## DISPLAY
 
+## Streamlit Page Settings
+# Webpage title
 st.set_page_config(
     page_title='H2Global meets Africa',
     layout="wide"
@@ -40,10 +32,9 @@ st.set_page_config(
 style = '<style>div.block-container{padding-top:.5rem; padding-bottom:0rem; padding-right:1.2rem; padding-left:1.2rem}</style>'
 st.write(style, unsafe_allow_html=True)
 
-## SIDEBAR
-
+# Sidebar
 with st.sidebar:
-    image = Image.open("bmbf-logo.png")
+    image = Image.open("bmbf-logo.png") # Display BMBF logo
     st.image(image, width=150)
     
     st.title("H2Global meets Africa: Energy demand modelling in Germany and the EU")
@@ -52,6 +43,7 @@ with st.sidebar:
         **Institute for Energy Networks and Energy Storage, OTH Regensburg**
     """)
 
+    # Choose between regional views
     pages = [
         "Europe",
         "Germany"
@@ -60,6 +52,7 @@ with st.sidebar:
 
     sel = {}
 
+    # Sensitivity scenario selections
     choices = {0: "2 °C", 1: "1.5 °C"}
     sel["low_carbon"] = st.radio(
         ":thermometer: Temperature rise",
@@ -86,7 +79,7 @@ with st.sidebar:
         horizontal=True,
         help='Left button must be selected for all other choices in this segment.',
     )
-    # ToDo: Change icon
+
     choices = {0: "no", 1: "yes"}
     sel["grid_freeze"] = st.radio(
         "🧊 Grid freeze",
@@ -95,7 +88,7 @@ with st.sidebar:
         horizontal=True,
         help='Left button must be selected for all other choices in this segment.',
     )
-    # ToDo: Change icon
+
     choices = {0: "no", 1: "yes"}
     sel["high_h2demand"] = st.radio(
         "💧 High H2 demand",
@@ -105,8 +98,10 @@ with st.sidebar:
         help='Left button must be selected for all other choices in this segment.',
     )
 
+    # Count how many sensitivity options are active
     number_sensitivities = sel["low_carbon"] + sel["low_h2cost"] + sel["grid_freeze"] + sel["high_h2demand"] + sel["high_carbon"]
 
+    # Additional information
     with st.expander("Details"):
          st.write("""
              All results were created using the open European energy system model
@@ -116,28 +111,33 @@ with st.sidebar:
              [Github](http://github.com/pypsa/pypsa-eur-sec).
              """)
 
-## PAGES
-
+## Main view of results: Germany or Europe
+# Europe
 if (display == "Europe") and (number_sensitivities <= 1):
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.title("Europe")
 
+    # Select scenario
     choices = config["EU_scenarios"]
     idx = st.selectbox("View", choices, format_func=lambda x: choices[x], label_visibility='hidden')
 
-    ds = xr.open_dataset("data/EU_scenarios_streamlit_v3.nc")
+    # Load result file for Europe from PyPSA-Eur
+    ds = xr.open_dataset("data/EU_scenarios_streamlit.nc")
 
+    # Filter the dataset by selected sensitivities
     accessors = {k: v for k, v in sel.items() if k not in ['power_grid', 'hydrogen_grid']}
     df = ds[idx].sel(**accessors, drop=True).to_dataframe().squeeze().unstack(level=0).dropna(axis=1)
 
+    # Flatten index (used for plotting)
     df.index = ["".join(str(col)).strip() for col in df.index.values]
 
+    # Preprocessing results depending on output type
     if idx == "energy":
         df.columns = df.columns.map(rename_techs_energy_balance)
         df = df.groupby(axis=1, level=0).sum()
-        
-        to_drop = df.columns[(df.abs() < 50).all(axis=0)] # ToDo: Outsource energy threshold
+
+        to_drop = df.columns[(df.abs() < 50).all(axis=0)]
         df.drop(columns=to_drop, inplace=True)
         
         missing = df.columns.difference(preferred_order_energy_balance)
@@ -147,27 +147,26 @@ if (display == "Europe") and (number_sensitivities <= 1):
         df.columns = df.columns.map(rename_techs_h2_balance)
         df = df.groupby(axis=1, level=0).sum()
         
-        to_drop = df.columns[(df.abs() < 50).all(axis=0)] # ToDo: Outsource energy threshold
+        to_drop = df.columns[(df.abs() < 50).all(axis=0)]
         df.drop(columns=to_drop, inplace=True)
     elif idx == "storage" or idx == "generation" or idx == "conversion":
         df.columns = df.columns.map(rename_tech_capacity)
         df = df.groupby(axis=1, level=0).sum()
         
-        to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
+        to_drop = df.columns[(df.abs() < 1).all(axis=0)] 
         df.drop(columns=to_drop, inplace=True)
     else:
         df.columns = df.columns.map(rename_techs_energy_balance)
         df = df.groupby(axis=1, level=0).sum()
         
-        to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
+        to_drop = df.columns[(df.abs() < 1).all(axis=0)] 
         df.drop(columns=to_drop, inplace=True)
         
         missing = df.columns.difference(preferred_order_energy_balance)
         order = preferred_order_energy_balance.intersection(df.columns).append(missing)
         df = df.loc[:, order]
 
-
-    #ToDo: Check storage
+    # Clean up redundant storage technologies
     if idx == 'storage':
          df.drop("co2", axis=1, inplace=True, errors="ignore")
          df.drop("co2 sequestered", axis=1, inplace=True, errors="ignore")
@@ -183,14 +182,14 @@ if (display == "Europe") and (number_sensitivities <= 1):
          df.drop("Solar", axis=1, inplace=True, errors="ignore")
          df.drop("biogas", axis=1, inplace=True, errors="ignore")
          df.drop("gas", axis=1, inplace=True, errors="ignore")
-         df.drop("ammonia store", axis=1, inplace=True, errors="ignore") # Check again
+         df.drop("ammonia store", axis=1, inplace=True, errors="ignore")
          df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
          df.drop("methane", axis=1, inplace=True, errors="ignore")
          df.drop("solar PV", axis=1, inplace=True, errors="ignore")
          df.drop("others", axis=1, inplace=True, errors="ignore")
          df.drop("hydrogen", axis=1, inplace=True, errors="ignore")
 
-    # ToDo: Check biomass capacities
+    # Clean up redundant generation technologies
     if idx == 'generation':
         df.drop("biogas", axis=1, inplace=True, errors="ignore")
         df.drop("solid biomass", axis=1, inplace=True, errors="ignore")
@@ -198,43 +197,42 @@ if (display == "Europe") and (number_sensitivities <= 1):
         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
         df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
 
-    # ToDo: Check biomass capacities
+    # Clean up redundant conversion technologies
     if idx == 'conversion':
         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
         df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
 
 
-    colors = prepare_colors(config)
-    color = [colors[c] for c in df.columns]
+    # Plotting
+    colors = prepare_colors(config) # Get color map from config
+    color = [colors[c] for c in df.columns] # Match color to column order
+    unit = choices[idx].split(" (")[1][:-1] # Extract unit from scenario name
 
-    unit = choices[idx].split(" (")[1][:-1] # ugly
-
-    ylim = config["ylim"][idx]
-
+    # Define bar chart
     plot = px.bar(
     df,
-    x=df.index,  # Assuming the DataFrame index represents the x-axis
-    y=df.columns,  # Stack the bars using the columns of the DataFrame
-    color_discrete_sequence=color,  # Apply the color sequence
+    x=df.index,  
+    y=df.columns,  
+    color_discrete_sequence=color,
     labels={"value": f"{choices[idx]}", "index": ""},
     height=720,
     )
 
     # Update layout for font scaling and legend
     plot.update_layout(
-        font=dict(size=18),  # Global font size, analogous to hvplot's fontscale
+        font=dict(size=18),
         xaxis=dict(
-            title=dict(font=dict(size=18)),  # X-axis title font size
-            tickfont=dict(size=16),  # X-axis tick labels font size
+            title=dict(font=dict(size=18)),
+            tickfont=dict(size=16),
         ),
         yaxis=dict(
-            title=dict(font=dict(size=18)),  # Y-axis title font size
-            tickfont=dict(size=16),  # Y-axis tick labels font size
+            title=dict(font=dict(size=18)),
+            tickfont=dict(size=16),
             tickformat=".0f"
         ),
         legend=dict(
-            title=dict(text=""),  # Remove the legend title
-            font=dict(size=16),  # Legend font size
+            title=dict(text=""),
+            font=dict(size=16),
         ),
     )
 
@@ -246,26 +244,33 @@ if (display == "Europe") and (number_sensitivities <= 1):
     # Display the Plotly chart in Streamlit
     st.plotly_chart(plot, use_container_width=True)
 
+## Main view of results: Germany or Europe
+# Germany
 if (display == "Germany") and (number_sensitivities <= 1):
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.title("Germany")
 
+    # Select scenario
     choices = config["DE_scenarios"]
     idx = st.selectbox("View", choices, format_func=lambda x: choices[x], label_visibility='hidden')
 
-    ds = xr.open_dataset("data/DE_scenarios_streamlit_v3.nc")
+    # Load result file for Germany from PyPSA-Eur
+    ds = xr.open_dataset("data/DE_scenarios_streamlit.nc")
 
+    # Filter the dataset by selected sensitivities
     accessors = {k: v for k, v in sel.items() if k not in ['power_grid', 'hydrogen_grid']}
     df = ds[idx].sel(**accessors, drop=True).to_dataframe().squeeze().unstack(level=0).dropna(axis=1)
 
+    # Flatten index (used for plotting)
     df.index = ["".join(str(col)).strip() for col in df.index.values]
 
+    # Preprocessing results depending on output type
     if idx == "energy":
         df.columns = df.columns.map(rename_techs_energy_balance)
         df = df.groupby(axis=1, level=0).sum()
         
-        to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
+        to_drop = df.columns[(df.abs() < 1).all(axis=0)]
         df.drop(columns=to_drop, inplace=True)
         
         missing = df.columns.difference(preferred_order_energy_balance)
@@ -275,44 +280,38 @@ if (display == "Germany") and (number_sensitivities <= 1):
         df.columns = df.columns.map(rename_techs_h2_balance)
         df = df.groupby(axis=1, level=0).sum()
         
-        to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
+        to_drop = df.columns[(df.abs() < 1).all(axis=0)]
         df.drop(columns=to_drop, inplace=True)
     elif idx == "storage" or idx == "generation" or idx == "conversion":
         df.columns = df.columns.map(rename_tech_capacity)
         df = df.groupby(axis=1, level=0).sum()
         
-        to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
+        to_drop = df.columns[(df.abs() < 1).all(axis=0)]
         df.drop(columns=to_drop, inplace=True)
     else:
         df.columns = df.columns.map(rename_techs_energy_balance)
         df = df.groupby(axis=1, level=0).sum()
         
-        to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
+        to_drop = df.columns[(df.abs() < 1).all(axis=0)]
         df.drop(columns=to_drop, inplace=True)
         
         missing = df.columns.difference(preferred_order_energy_balance)
         order = preferred_order_energy_balance.intersection(df.columns).append(missing)
         df = df.loc[:, order]
 
+    # Clean up redundant storage technologies
     if idx == 'storage':
-         #df.drop("co2", axis=1, inplace=True, errors="ignore")
          df.drop("co2 sequestered", axis=1, inplace=True, errors="ignore")
-         #df.drop("electricity distribution grid", axis=1, inplace=True, errors="ignore")
-         #df.drop("methanol", axis=1, inplace=True, errors="ignore")
-         #df.drop("oil", axis=1, inplace=True, errors="ignore")
-         #df.drop("oil refining", axis=1, inplace=True, errors="ignore")
-         #df.drop("solar rooftop", axis=1, inplace=True, errors="ignore")
          df.drop("solid biomass", axis=1, inplace=True, errors="ignore")
          df.drop("unsustainable biogas", axis=1, inplace=True, errors="ignore")
          df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
          df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
-         #df.drop("Solar", axis=1, inplace=True, errors="ignore")
          df.drop("biogas", axis=1, inplace=True, errors="ignore")
          df.drop("gas", axis=1, inplace=True, errors="ignore")
-         df.drop("ammonia store", axis=1, inplace=True, errors="ignore") # Check again
-         df.drop("hydrogen", axis=1, inplace=True, errors="ignore") # Check again
+         df.drop("ammonia store", axis=1, inplace=True, errors="ignore")
+         df.drop("hydrogen", axis=1, inplace=True, errors="ignore")
 
-    # ToDo: Check biomass capacities
+    # Clean up redundant generation technologies
     if idx == 'generation':
         df.drop("biogas", axis=1, inplace=True, errors="ignore")
         df.drop("solid biomass", axis=1, inplace=True, errors="ignore")
@@ -320,7 +319,7 @@ if (display == "Germany") and (number_sensitivities <= 1):
         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
         df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
 
-    # ToDo: Check biomass capacities
+    # Clean up redundant conversion technologies
     if idx == 'conversion':
         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
         df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
@@ -328,38 +327,36 @@ if (display == "Germany") and (number_sensitivities <= 1):
         df.drop("unsustainable biomass", axis=1, inplace=True, errors="ignore")
         df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
         
+    # Plotting
+    colors = prepare_colors(config) # Get color map from config
+    color = [colors[c] for c in df.columns] # Match color to column order
+    unit = choices[idx].split(" (")[1][:-1] # Extract unit from scenario name
 
-    colors = prepare_colors(config)
-    color = [colors[c] for c in df.columns]
-
-    unit = choices[idx].split(" (")[1][:-1] # ugly
-
-    ylim = config["ylim"][idx]
-
+    # Define bar chart
     plot = px.bar(
     df,
-    x=df.index,  # Assuming the DataFrame index represents the x-axis
-    y=df.columns,  # Stack the bars using the columns of the DataFrame
-    color_discrete_sequence=color,  # Apply the color sequence
+    x=df.index,
+    y=df.columns,
+    color_discrete_sequence=color,
     labels={"value": f"{choices[idx]}", "index": ""},
     height=720,
     )
 
     # Update layout for font scaling and legend
     plot.update_layout(
-        font=dict(size=18),  # Global font size, analogous to hvplot's fontscale
+        font=dict(size=18),
         xaxis=dict(
-            title=dict(font=dict(size=18)),  # X-axis title font size
-            tickfont=dict(size=16),  # X-axis tick labels font size
+            title=dict(font=dict(size=18)),
+            tickfont=dict(size=16),
         ),
         yaxis=dict(
-            title=dict(font=dict(size=18)),  # Y-axis title font size
-            tickfont=dict(size=16),  # Y-axis tick labels font size
+            title=dict(font=dict(size=18)),
+            tickfont=dict(size=16),
             tickformat=".1f" if idx =="storage" else ".0f"
         ),
         legend=dict(
-            title=dict(text=""),  # Remove the legend title
-            font=dict(size=16),  # Legend font size
+            title=dict(text=""),
+            font=dict(size=16),
         ),
     )
 
@@ -371,9 +368,8 @@ if (display == "Germany") and (number_sensitivities <= 1):
     # Display the Plotly chart in Streamlit
     st.plotly_chart(plot, use_container_width=True)
 
-
+# Sensitivity check
 if number_sensitivities > 1:
-    
     st.write("")
     st.write("")
 
