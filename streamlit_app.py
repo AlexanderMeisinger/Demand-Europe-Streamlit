@@ -40,7 +40,7 @@ with open(svg_path, "r") as f:
 # Sidebar
 with st.sidebar:
     st.components.v1.html(
-        f'<div style="margin-left:-20px">{svg}</div>', 
+        f'<div style="margin-left:-40px">{svg}</div>', 
         height=150
     )
     
