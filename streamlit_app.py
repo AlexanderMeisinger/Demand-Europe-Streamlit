@@ -40,8 +40,8 @@ with open(svg_path, "r") as f:
 # Sidebar
 with st.sidebar:
     st.components.v1.html(
-        f'<div style="margin-left:-40px">{svg}</div>', 
-        height=150
+        f'<div style="margin-left:-50px">{svg}</div>', 
+        height=100
     )
     
     st.title("H2Global meets Africa: Energy demand modelling in Germany and the EU")
