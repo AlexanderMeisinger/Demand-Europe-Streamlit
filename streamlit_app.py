@@ -32,10 +32,14 @@ st.set_page_config(
 style = '<style>div.block-container{padding-top:.5rem; padding-bottom:0rem; padding-right:1.2rem; padding-left:1.2rem}</style>'
 st.write(style, unsafe_allow_html=True)
 
+# SVG als Text (z. B. aus einer Datei oder als String)
+svg_path = "BMBFTR_Logo.svg"
+with open(svg_path, "r") as f:
+    svg = f.read()
+
 # Sidebar
 with st.sidebar:
-    image = Image.open("BMFTR_Logo.png") # Display BMBF logo
-    st.image(image, width=150)
+    st.components.v1.html(svg, height=150)
     
     st.title("H2Global meets Africa: Energy demand modelling in Germany and the EU")
 
