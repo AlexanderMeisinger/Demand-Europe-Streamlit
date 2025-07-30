@@ -33,7 +33,7 @@ style = '<style>div.block-container{padding-top:.5rem; padding-bottom:0rem; padd
 st.write(style, unsafe_allow_html=True)
 
 # SVG als Text (z. B. aus einer Datei oder als String)
-svg_path = "BMBFTR_Logo.svg"
+svg_path = "BMFTR_Logo.svg"
 with open(svg_path, "r") as f:
     svg = f.read()
 
