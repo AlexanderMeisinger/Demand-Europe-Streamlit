@@ -34,7 +34,7 @@ st.write(style, unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
-    image = Image.open("bmbf-logo.png") # Display BMBF logo
+    image = Image.open("Logo-BMFTR.png") # Display BMBF logo
     st.image(image, width=150)
     
     st.title("H2Global meets Africa: Energy demand modelling in Germany and the EU")
