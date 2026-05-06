@@ -135,7 +135,7 @@ if (display == "Europe") and (number_sensitivities <= 1):
 
     if idx == "energy":
         df.columns = df.columns.map(rename_techs_energy_balance)
-        df = df.groupby(axis=1, level=0).sum()
+        df = df.T.groupby(level=0).sum().T
         
         to_drop = df.columns[(df.abs() < 50).all(axis=0)] # ToDo: Outsource energy threshold
         df.drop(columns=to_drop, inplace=True)
@@ -145,19 +145,19 @@ if (display == "Europe") and (number_sensitivities <= 1):
         df = df.loc[:, order]
     elif idx == "hydrogen": 
         df.columns = df.columns.map(rename_techs_h2_balance)
-        df = df.groupby(axis=1, level=0).sum()
+        df = df.T.groupby(level=0).sum().T
         
         to_drop = df.columns[(df.abs() < 50).all(axis=0)] # ToDo: Outsource energy threshold
         df.drop(columns=to_drop, inplace=True)
     elif idx == "storage" or idx == "generation" or idx == "conversion":
         df.columns = df.columns.map(rename_tech_capacity)
-        df = df.groupby(axis=1, level=0).sum()
+        df = df.T.groupby(level=0).sum().T
         
         to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
         df.drop(columns=to_drop, inplace=True)
     else:
         df.columns = df.columns.map(rename_techs_energy_balance)
-        df = df.groupby(axis=1, level=0).sum()
+        df = df.T.groupby(level=0).sum().T
         
         to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
         df.drop(columns=to_drop, inplace=True)
@@ -263,7 +263,7 @@ if (display == "Germany") and (number_sensitivities <= 1):
 
     if idx == "energy":
         df.columns = df.columns.map(rename_techs_energy_balance)
-        df = df.groupby(axis=1, level=0).sum()
+        df = df.T.groupby(level=0).sum().T
         
         to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
         df.drop(columns=to_drop, inplace=True)
@@ -273,19 +273,19 @@ if (display == "Germany") and (number_sensitivities <= 1):
         df = df.loc[:, order]
     elif idx == "hydrogen": 
         df.columns = df.columns.map(rename_techs_h2_balance)
-        df = df.groupby(axis=1, level=0).sum()
+        df = df.T.groupby(level=0).sum().T
         
         to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
         df.drop(columns=to_drop, inplace=True)
     elif idx == "storage" or idx == "generation" or idx == "conversion":
         df.columns = df.columns.map(rename_tech_capacity)
-        df = df.groupby(axis=1, level=0).sum()
+        df = df.T.groupby(level=0).sum().T
         
         to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
         df.drop(columns=to_drop, inplace=True)
     else:
         df.columns = df.columns.map(rename_techs_energy_balance)
-        df = df.groupby(axis=1, level=0).sum()
+        df = df.T.groupby(level=0).sum().T
         
         to_drop = df.columns[(df.abs() < 1).all(axis=0)] # ToDo: Outsource energy threshold
         df.drop(columns=to_drop, inplace=True)
