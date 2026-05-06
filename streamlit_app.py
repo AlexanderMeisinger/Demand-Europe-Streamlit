@@ -46,7 +46,7 @@ with st.sidebar:
     image = Image.open("bmftr-logo.png")
     st.image(image, width=150)
     
-    st.title("H2Global meets Africa: Energy demand modelling in Germany and the EU")
+    st.title("H2Global meets Africa: Energy demand modelling in Germany and Europe")
 
     st.markdown("""
         **Institute for Energy Networks and Energy Storage, OTH Regensburg**
