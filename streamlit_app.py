@@ -166,14 +166,15 @@ if (display == "Europe") and (number_sensitivities <= 1):
         order = preferred_order_energy_balance.intersection(df.columns).append(missing)
         df = df.loc[:, order]
 
-
     if idx == 'storage':
          df.drop("co2", axis=1, inplace=True, errors="ignore")
          df.drop("co2 sequestered", axis=1, inplace=True, errors="ignore")
          df.drop("electricity distribution grid", axis=1, inplace=True, errors="ignore")
-         df.drop("methanol", axis=1, inplace=True, errors="ignore") ##
-         df.drop("oil", axis=1, inplace=True, errors="ignore") ##
+         df.drop("oil", axis=1, inplace=True, errors="ignore")
          df.drop("oil refining", axis=1, inplace=True, errors="ignore")
+         df.drop("methanol", axis=1, inplace=True, errors="ignore")
+         df.drop("methane", axis=1, inplace=True, errors="ignore")
+         df.drop("ammonia store", axis=1, inplace=True, errors="ignore")
          df.drop("solar rooftop", axis=1, inplace=True, errors="ignore")
          df.drop("solid biomass", axis=1, inplace=True, errors="ignore")
          df.drop("unsustainable biogas", axis=1, inplace=True, errors="ignore")
@@ -182,9 +183,7 @@ if (display == "Europe") and (number_sensitivities <= 1):
          df.drop("Solar", axis=1, inplace=True, errors="ignore")
          df.drop("biogas", axis=1, inplace=True, errors="ignore")
          df.drop("gas", axis=1, inplace=True, errors="ignore")
-         df.drop("ammonia store", axis=1, inplace=True, errors="ignore") ##
          df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
-         df.drop("methane", axis=1, inplace=True, errors="ignore") ##
          df.drop("solar PV", axis=1, inplace=True, errors="ignore")
          df.drop("others", axis=1, inplace=True, errors="ignore")
          df.drop("hydrogen", axis=1, inplace=True, errors="ignore")
@@ -292,24 +291,27 @@ if (display == "Germany") and (number_sensitivities <= 1):
         df = df.loc[:, order]
 
     if idx == 'storage':
-         #df.drop("co2", axis=1, inplace=True, errors="ignore")
-         df.drop("co2 sequestered", axis=1, inplace=True, errors="ignore")
-         #df.drop("electricity distribution grid", axis=1, inplace=True, errors="ignore")
-         #df.drop("methanol", axis=1, inplace=True, errors="ignore")
-         #df.drop("oil", axis=1, inplace=True, errors="ignore")
-         #df.drop("oil refining", axis=1, inplace=True, errors="ignore")
-         #df.drop("solar rooftop", axis=1, inplace=True, errors="ignore")
-         df.drop("solid biomass", axis=1, inplace=True, errors="ignore")
-         df.drop("unsustainable biogas", axis=1, inplace=True, errors="ignore")
-         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
-         df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
-         #df.drop("Solar", axis=1, inplace=True, errors="ignore")
-         df.drop("biogas", axis=1, inplace=True, errors="ignore")
-         df.drop("gas", axis=1, inplace=True, errors="ignore")
-         df.drop("ammonia store", axis=1, inplace=True, errors="ignore") # Check again
-         df.drop("hydrogen", axis=1, inplace=True, errors="ignore") # Check again
+        df.drop("co2", axis=1, inplace=True, errors="ignore")
+        df.drop("co2 sequestered", axis=1, inplace=True, errors="ignore")
+        df.drop("electricity distribution grid", axis=1, inplace=True, errors="ignore")
+        df.drop("oil", axis=1, inplace=True, errors="ignore")
+        df.drop("oil refining", axis=1, inplace=True, errors="ignore")
+        df.drop("methanol", axis=1, inplace=True, errors="ignore")
+        df.drop("methane", axis=1, inplace=True, errors="ignore")
+        df.drop("ammonia store", axis=1, inplace=True, errors="ignore")
+        df.drop("solar rooftop", axis=1, inplace=True, errors="ignore")
+        df.drop("solid biomass", axis=1, inplace=True, errors="ignore")
+        df.drop("unsustainable biogas", axis=1, inplace=True, errors="ignore")
+        df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
+        df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
+        df.drop("Solar", axis=1, inplace=True, errors="ignore")
+        df.drop("biogas", axis=1, inplace=True, errors="ignore")
+        df.drop("gas", axis=1, inplace=True, errors="ignore")
+        df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
+        df.drop("solar PV", axis=1, inplace=True, errors="ignore")
+        df.drop("others", axis=1, inplace=True, errors="ignore")
+        df.drop("hydrogen", axis=1, inplace=True, errors="ignore")   
 
-    # ToDo: Check biomass capacities
     if idx == 'generation':
         df.drop("coal", axis=1, inplace=True, errors="ignore")
         df.drop("gas", axis=1, inplace=True, errors="ignore")
