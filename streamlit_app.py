@@ -201,12 +201,6 @@ if (display == "Europe") and (number_sensitivities <= 1):
         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
         df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
 
-
-    if idx == 'conversion':
-        df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
-        df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
-
-
     colors = prepare_colors(config)
     color = [colors[c] for c in df.columns]
 
@@ -327,15 +321,6 @@ if (display == "Germany") and (number_sensitivities <= 1):
         df.drop("unsustainable biogas", axis=1, inplace=True, errors="ignore")
         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
         df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
-
-    # ToDo: Check biomass capacities
-    if idx == 'conversion':
-        df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
-        df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
-        df.drop("unsustainable biogas", axis=1, inplace=True, errors="ignore")
-        df.drop("unsustainable biomass", axis=1, inplace=True, errors="ignore")
-        df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
-        
 
     colors = prepare_colors(config)
     color = [colors[c] for c in df.columns]
