@@ -327,7 +327,7 @@ if (display == "Germany") and (number_sensitivities <= 1):
     colors = prepare_colors(config)
     color = [colors[c] for c in df.columns]
 
-    unit = choices[idx].split(" (")[1][:-1] # ugly
+    unit = choices[idx].split(" (")[1][:-1]
 
     ylim = config["ylim"][idx]
 
