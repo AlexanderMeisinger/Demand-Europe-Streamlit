@@ -86,7 +86,7 @@ with st.sidebar:
         horizontal=True,
         help='Left button must be selected for all other choices in this segment.',
     )
-    # ToDo: Change icon
+    
     choices = {0: "no", 1: "yes"}
     sel["grid_freeze"] = st.radio(
         "🧊 Grid freeze",
@@ -95,7 +95,7 @@ with st.sidebar:
         horizontal=True,
         help='Left button must be selected for all other choices in this segment.',
     )
-    # ToDo: Change icon
+    
     choices = {0: "no", 1: "yes"}
     sel["high_h2demand"] = st.radio(
         "💧 High H2 demand",
@@ -167,13 +167,12 @@ if (display == "Europe") and (number_sensitivities <= 1):
         df = df.loc[:, order]
 
 
-    #ToDo: Check storage
     if idx == 'storage':
          df.drop("co2", axis=1, inplace=True, errors="ignore")
          df.drop("co2 sequestered", axis=1, inplace=True, errors="ignore")
          df.drop("electricity distribution grid", axis=1, inplace=True, errors="ignore")
-         df.drop("methanol", axis=1, inplace=True, errors="ignore")
-         df.drop("oil", axis=1, inplace=True, errors="ignore")
+         df.drop("methanol", axis=1, inplace=True, errors="ignore") ##
+         df.drop("oil", axis=1, inplace=True, errors="ignore") ##
          df.drop("oil refining", axis=1, inplace=True, errors="ignore")
          df.drop("solar rooftop", axis=1, inplace=True, errors="ignore")
          df.drop("solid biomass", axis=1, inplace=True, errors="ignore")
@@ -183,14 +182,14 @@ if (display == "Europe") and (number_sensitivities <= 1):
          df.drop("Solar", axis=1, inplace=True, errors="ignore")
          df.drop("biogas", axis=1, inplace=True, errors="ignore")
          df.drop("gas", axis=1, inplace=True, errors="ignore")
-         df.drop("ammonia store", axis=1, inplace=True, errors="ignore") # Check again
+         df.drop("ammonia store", axis=1, inplace=True, errors="ignore") ##
          df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
-         df.drop("methane", axis=1, inplace=True, errors="ignore")
+         df.drop("methane", axis=1, inplace=True, errors="ignore") ##
          df.drop("solar PV", axis=1, inplace=True, errors="ignore")
          df.drop("others", axis=1, inplace=True, errors="ignore")
          df.drop("hydrogen", axis=1, inplace=True, errors="ignore")
 
-    # ToDo: Check biomass capacities
+
     if idx == 'generation':
         df.drop("biogas", axis=1, inplace=True, errors="ignore")
         df.drop("solid biomass", axis=1, inplace=True, errors="ignore")
@@ -198,7 +197,7 @@ if (display == "Europe") and (number_sensitivities <= 1):
         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
         df.drop("unsustainable solid biomass", axis=1, inplace=True, errors="ignore")
 
-    # ToDo: Check biomass capacities
+
     if idx == 'conversion':
         df.drop("unsustainable bioliquids", axis=1, inplace=True, errors="ignore")
         df.drop("solid biomass transport", axis=1, inplace=True, errors="ignore")
@@ -207,7 +206,7 @@ if (display == "Europe") and (number_sensitivities <= 1):
     colors = prepare_colors(config)
     color = [colors[c] for c in df.columns]
 
-    unit = choices[idx].split(" (")[1][:-1] # ugly
+    unit = choices[idx].split(" (")[1][:-1]
 
     ylim = config["ylim"][idx]
 
