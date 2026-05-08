@@ -2,9 +2,9 @@
 
 Base: [![DOI](https://zenodo.org/badge/451538981.svg)](https://zenodo.org/badge/latestdoi/451538981)
 
-Branch: [H2G-A-DemandEurope](https://github.com/AlexanderMeisinger/pypsa-eur/tree/H2G-A-AP3)
+Branch: [Demand-Europe-Branch](https://github.com/AlexanderMeisinger/pypsa-eur/tree/H2G-A-AP3)
 
-Preparation: [H2G-A-DemandEurope](https://github.com/AlexanderMeisinger/analyse-h2g-a-ap3-eu)
+Preparation: [Demand-Europe-Preparation](https://github.com/AlexanderMeisinger/analyse-h2g-a-ap3-eu)
 
 ## Code for interactive dashboard for results exploration.
 
