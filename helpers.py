@@ -107,6 +107,7 @@ def rename_techs_energy_balance(label):
         # storage
         "Pumped Hydro Storage": "pumped hydro storage",
         "H2 Store": "hydrogen storage",
+        "Battery Storage": "battery storage",
         # pipeline
         "H2 pipeline": "hydrogen pipeline"
         }
