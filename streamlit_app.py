@@ -122,8 +122,9 @@ with st.sidebar:
              All results were created using the open European energy system model
              PyPSA-Eur-Sec. The model covers all energy sectors including
              electricity, buildings, transport, agriculture and industry at high
-             spatio-temporal resolution. The model code is available on
-             [Github](http://github.com/pypsa/pypsa-eur-sec).
+             spatio-temporal resolution. The code for the energy model and for data preparation is available on
+             [Github-Model](https://github.com/AlexanderMeisinger/pypsa-eur/tree/H2G-A-Demand-Europe-WP3) and                  
+             [Github-Preparation](https://github.com/AlexanderMeisinger/Demand-Europe-Preparation).
              """)
 
 ## PAGES
