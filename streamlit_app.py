@@ -66,7 +66,9 @@ with st.sidebar:
         choices,
         format_func=lambda x: choices[x],
         horizontal=True,
-        help='Left button must be selected for all other choices in this segment.',
+        help='**Scenario settings:**\n\n'
+        '**2.0 °C:** Basis Scenario aligned with the European Green Deal. \n\n'
+        '**1.5 °C:** Scenario disigned to analyse the impact of the 1.5 °C climate target.',
     )
 
     choices = {0: "yes", 1: "no"}
@@ -75,7 +77,9 @@ with st.sidebar:
         choices,
         format_func=lambda x: choices[x],
         horizontal=True,
-        help='Left button must be selected for all other choices in this segment.',
+        help='**Scenario settings:**\n\n'
+        '**Yes:** Basis Scenario aligned with the European Green Deal. \n\n'
+        '**No:** Scenario designed to analyse the impact of no further progress on climate actions after 2025.',
     )
 
     choices = {0: "No", 1: "Yes"}
@@ -84,7 +88,9 @@ with st.sidebar:
         choices,
         format_func=lambda x: choices[x],
         horizontal=True,
-        help='Left button must be selected for all other choices in this segment.',
+        help='**Scenario settings:**\n\n'
+        '**No:** Basis Scenario aligned with the European Green Deal. \n\n'
+        '**Yes:** Scenario designed to analyse the impact of a 25% reduction in electrolyser CAPEX costs.',
     )
     
     choices = {0: "no", 1: "yes"}
@@ -93,7 +99,9 @@ with st.sidebar:
         choices,
         format_func=lambda x: choices[x],
         horizontal=True,
-        help='Left button must be selected for all other choices in this segment.',
+        help='**Scenario settings:**\n\n'
+        '**No:** Basis Scenario aligned with the European Green Deal. \n\n'
+        '**Yes:** Scenario designed to analyse the impact of no additional network expansion.',
     )
     
     choices = {0: "no", 1: "yes"}
@@ -102,7 +110,9 @@ with st.sidebar:
         choices,
         format_func=lambda x: choices[x],
         horizontal=True,
-        help='Left button must be selected for all other choices in this segment.',
+        help='**Scenario settings:**\n\n'
+        '**No:** Basis Scenario aligned with the European Green Deal. \n\n'
+        '**Yes:** Scenario designed to analyse the impact of a 20% increase in hydrogen demand in the HVC industry, aviation, and automotive sectors.',
     )
 
     number_sensitivities = sel["low_carbon"] + sel["low_h2cost"] + sel["grid_freeze"] + sel["high_h2demand"] + sel["high_carbon"]
